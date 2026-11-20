@@ -19,6 +19,7 @@ describe("eslint-plugin-react-doctor", () => {
       "preact",
       "react-native",
       "recommended",
+      "recommended-error",
       "tanstack-query",
       "tanstack-start",
     ]);
@@ -45,6 +46,14 @@ describe("eslint-plugin-react-doctor", () => {
     expect(eslintPlugin.configs["tanstack-start"].rules).toEqual(TANSTACK_START_RULES);
     expect(eslintPlugin.configs["tanstack-query"].rules).toEqual(TANSTACK_QUERY_RULES);
     expect(eslintPlugin.configs.preact.rules).toEqual(PREACT_RULES);
+  });
+
+  it("escalates every enabled recommended rule to error in recommended-error", () => {
+    const recommendedErrorRules = eslintPlugin.configs["recommended-error"].rules;
+    expect(Object.keys(recommendedErrorRules)).toEqual(Object.keys(RECOMMENDED_RULES));
+    for (const [ruleKey, severity] of Object.entries(RECOMMENDED_RULES)) {
+      expect(recommendedErrorRules[ruleKey]).toBe(severity === "off" ? "off" : "error");
+    }
   });
 
   it("only references wrapped rule ids from presets", () => {

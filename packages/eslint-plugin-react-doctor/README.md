@@ -67,6 +67,7 @@ React Doctor's CLI discovers this automatically. ESLint flat configs are static,
 | Config           | What it adds                                                  |
 | ---------------- | ------------------------------------------------------------- |
 | `recommended`    | Framework-agnostic React rules. Safe baseline.                |
+| `recommended-error` | `recommended` with every enabled rule at `error`.          |
 | `next`           | Next.js specific rules (App Router, server components, etc.). |
 | `react-native`   | React Native specific rules.                                  |
 | `tanstack-start` | TanStack Start specific rules.                                |

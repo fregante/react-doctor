@@ -54,6 +54,7 @@ interface EslintPlugin {
   rules: Record<string, EslintRule>;
   configs: {
     recommended: EslintFlatConfig;
+    "recommended-error": EslintFlatConfig;
     next: EslintFlatConfig;
     "react-native": EslintFlatConfig;
     "tanstack-start": EslintFlatConfig;
@@ -102,6 +103,16 @@ const buildFlatConfig = (
   settings: { "react-doctor": { portedRuleMode: "curated" } },
 });
 
+const escalateToError = (
+  ruleSet: Record<string, OxlintRuleSeverity>,
+): Record<string, OxlintRuleSeverity> =>
+  Object.fromEntries(
+    Object.entries(ruleSet).map(([ruleKey, severity]) => [
+      ruleKey,
+      severity === "off" ? severity : "error",
+    ]),
+  );
+
 const eslintPlugin: EslintPlugin = {
   meta: {
     name: PLUGIN_NAMESPACE,
@@ -110,6 +121,7 @@ const eslintPlugin: EslintPlugin = {
   rules: eslintShapedRules,
   configs: {
     recommended: buildFlatConfig("recommended", RECOMMENDED_RULES),
+    "recommended-error": buildFlatConfig("recommended-error", escalateToError(RECOMMENDED_RULES)),
     next: buildFlatConfig("next", NEXTJS_RULES),
     "react-native": buildFlatConfig("react-native", REACT_NATIVE_RULES),
     "tanstack-start": buildFlatConfig("tanstack-start", TANSTACK_START_RULES),
